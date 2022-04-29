@@ -15,6 +15,6 @@ app.get('/',(req,res)=>{
 app.listen(port,()=>{
 
     console.log('run port ${port}')
-    console.log('run port')
+    
     console.log(`run port ${port}`)
 })
