@@ -2,7 +2,7 @@ const express=require('express')
 const app= express()
 require('dotenv').config()
 var cors=require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 app.use(cors())
@@ -37,7 +37,23 @@ async function run(){
              const count= await abc.count();
              res.send({count});
          })
+         //inventory/:id
+         app.get('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productCollection.findOne(query);
+            res.send(result);
 
+        });
+
+        //----------------inser item--------------------
+
+        // create a document to insert user
+      app.post('/products', async(req,res)=>{
+        const newUser=req.body;
+        const result = await productCollection.insertOne(newUser);
+        res.send(result);
+      })
 
     }finally{
 
