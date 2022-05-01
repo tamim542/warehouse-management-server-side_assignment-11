@@ -37,8 +37,10 @@ async function run(){
              const count= await abc.count();
              res.send({count});
          })
-         //inventory/:id
-         app.get('/inventory/:id', async (req, res) => {
+
+         //---------inventory/:id-----------
+
+         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await productCollection.findOne(query);
@@ -62,6 +64,8 @@ async function run(){
         const result = await productCollection.deleteOne(query);
         res.send(result);
     });
+
+    //update
 
     }finally{
 
