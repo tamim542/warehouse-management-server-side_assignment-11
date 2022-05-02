@@ -65,7 +65,20 @@ async function run(){
         res.send(result);
     });
 
-    //update
+     // item Collection API----------
+
+     app.get('/item',  async (req, res) => {
+        
+        const email = req.query.email;
+       
+      
+            const query = {email:email};
+            const cursor = productCollection.find(query);
+            const items = await cursor.toArray();
+            res.send(items);
+        
+        
+    })
 
     }finally{
 
