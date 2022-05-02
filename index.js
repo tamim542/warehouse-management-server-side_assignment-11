@@ -57,7 +57,7 @@ async function run(){
         res.send(result);
       })
 
-       //------------- Delete Item---------------
+       //------------- Delete Item from manageInventory---------------
        app.delete('/products/:id', async(req, res) =>{
         const id = req.params.id;
         const query = {_id: ObjectId(id)};
