@@ -34,7 +34,7 @@ function verifyJWT(req,res,next){
 
 }
 app.get('/',(req,res)=>{
-    res.send('successfully');
+    res.send('successfully run');
 })
 
 
@@ -47,8 +47,9 @@ async function run(){
     try{
         await client.connect()
         const productCollection=client.db('assignment11').collection('laptopbrand')
+        const addressCollection=client.db('assignment11').collection('contactinfo')
         
-        //Auth jwt
+        //Authenticate jwt
         app.post('/login',async(req,res)=>{
             const user=req.body;
             const accessToken = jwt.sign(user, process.env.DB_TOKEN_SECRET, {
@@ -77,14 +78,24 @@ async function run(){
 
         });
 
-        //----------------inser item--------------------
+        //----------------insert item--------------------
 
-        // create a document to insert user
+        
       app.post('/products', async(req,res)=>{
-        const newUser=req.body;
-        const result = await productCollection.insertOne(newUser);
+        const newItem=req.body;
+        const result = await productCollection.insertOne(newItem);
         res.send(result);
       })
+
+      //----------------insert item--------------------
+
+      app.post('/contactform', async(req,res)=>{
+        const addressInfo=req.body;
+        const result = await  addressCollection.insertOne(addressInfo);
+        res.send(result);
+      })
+
+      
 
        //------------- Delete Item from manageInventory---------------
        app.delete('/products/:id', async(req, res) =>{
@@ -122,7 +133,7 @@ async function run(){
     })
 
 
-    // update delivered
+    // update delivered--------------------
     app.put('/products/:id', async(req, res) =>{
         const id = req.params.id;
         const delivered = req.body;
@@ -131,6 +142,22 @@ async function run(){
         const updatedDoc = {
             $set: {
                 quantity: delivered.quantity,
+                
+            }
+        };
+        const result = await productCollection.updateOne(filter, updatedDoc, options);
+        res.send(result);
+
+    })
+    // Quantity add with old quantity--------------------
+    app.put('/quantity/:id', async(req, res) =>{
+        const id = req.params.id;
+        const addQuantity = req.body;
+        const filter = {_id: ObjectId(id)};
+        const options = { upsert: true };
+        const updatedDoc = {
+            $set: {
+                quantity: addQuantity.quantity,
                 
             }
         };
